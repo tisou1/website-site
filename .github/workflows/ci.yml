@@ -32,18 +32,18 @@ jobs:
         with:
           repository: tisou1/tisou1.github.io  # 这里是你要推送的仓库地址
           ref: main  # 这里是你要推送的分支
-          path: public # 这里是你要推送的目录
-          token: ${{ secrets.DEPLOY_KEY }} # 使用你的 PAT secret
+          path: github-pages-public # 这里是检出（clone）的目录 也就相当于你本地在这个目录下拉去tisou1.github.io这个仓库的代码
+          token: ${{ secrets.DEPLOY_KEY }} # 使用你的 github token 配置上去 secret
       
       - name: Deploy to Github Pages
         run: |
           cd dist # vite的构建目录
-          rm -rf ../public/*
-          cp -r * ../public/
-          cd ../public
+          rm -rf ../github-pages-public/*
+          cp -r * ../github-pages-public/
+          cd ../github-pages-public
           git config --global user.name "${{ github.actor }}"
           git config --global user.email "${{ github.actor }}@users.noreply.github.com"
           git add .
           git commit -m "Deploy website"
-          git remote set-url origin "https://${{ secrets.DEPLOY_KEY }}@github.com/tisou1/tisou1.github.io.git"
+          # git remote set-url origin "https://${{ secrets.DEPLOY_KEY }}@github.com/tisou1/tisou1.github.io.git"
           git push origin HEAD:${{ github.event.repository.default_branch }} # 推送到 GitHub Pages 仓库的默认分支
