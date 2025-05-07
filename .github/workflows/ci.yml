@@ -1,0 +1,47 @@
+name: deploy this repo to Github Pages
+on: # 定义触发action的事件
+  push:
+    branches: [ main ]  #推送到main分支时触发
+  
+jobs:
+  deploy-code:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 'latest'
+
+      - name: install node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 22.x
+          cache: pnpm
+      
+      - name: install deps
+        run: pnpm install #安装依赖
+
+      - name: test
+        run: pnpm test
+
+      - name: build 
+        run: pnpm build
+
+      - name: Checkout Github Pages Repository
+        uses: actions/checkout@v4
+        with:
+          repository: tisou1/tisou1.github.io  # 这里是你要推送的仓库地址
+          ref: main  # 这里是你要推送的分支
+          path: public # 这里是你要推送的目录
+      
+      - name: Deploy to Github Pages
+        run: |
+          cd dist # vite的构建目录
+          rm -rf ../public/*
+          cp -r * ../public/
+          cd ../public
+          git config --global user.name "${{ github.actor }}"
+          git config --global user.email "${{ github.actor }}@users.noreply.github.com"
+          git add .
+          git commit -m "Deploy website"
+          git push origin HEAD:${{ github.event.repository.default_branch }} # 推送到 GitHub Pages 仓库的默认分支
