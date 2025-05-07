@@ -17,7 +17,6 @@ function Index() {
         value={value}
         onChange={e => setValue(e.target.value)}
       />
-      hello
 
       <div className="mt-3">
         <button className="btn" onClick={go}>go</button>
