@@ -1,7 +1,7 @@
 import { ClickToComponent } from 'click-to-react-component'
 import React, { Suspense } from 'react'
 import ReactDOM from 'react-dom/client'
-import { BrowserRouter as Router, useRoutes } from 'react-router-dom'
+import { HashRouter as Router, useRoutes } from 'react-router-dom'
 import routes from '~react-pages'
 import Footer from './components/footer'
 import './index.css'
